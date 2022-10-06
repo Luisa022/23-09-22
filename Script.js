@@ -1,49 +1,62 @@
-function confirmar() {
+const corpotabela = document.getElementById ("corpotabela");
 
-    const url = 'http://10.0.3.132.1313/listar-alunos'
-    const body = document.getElementById("corpoTabela");
+function PegarDados() {
+    const url = 'http://10.0.3.132:1313/listar-alunos'
 
-    fetch (url, {
+    fetch(url, {
         headers: {
-            Accept: 'aplication/json',
-            "Content-type": "aplication/json"
+            Accept: 'application/json',
+            "Content-type": "application/json"
         },
         method: 'GET'
-    }).then((resultado)=> {
+    }).then((resultado) => {
         return resultado.json();
     })
-    .then((dados)=> {
-        corpoTabela.innerHTML = ''
-        for (let num = 0; num< dados.lenght; num++){
-            const criaLinha = document.createElement("tr");
-            
-            criaLinha.innerHTML = `            
+    .then((dados) => {
+        corpotabela.innerHTML = ''
+        for (var num = 0; num < dados.length; num++) {
+            const crialinha = document.createElement("tr");
+
+            crialinha.innerHTML = `
             <tr>
             <th scope="row">${dados[num].id}</th>
             <td>${dados[num].nome}</td>
-            <td>${dados[num].telefone}</td>
             <td>${dados[num].email}</td>
             <td>${dados[num].turma}</td>
-        </tr>`
-
-            corpoTabela.appendChild(criaLinha);
+            <td>${dados[num].avatar}</td>
+            </tr> 
+            `;                   
+            corpotabela.appendChild(crialinha);
 
             console.log(dados[num]);
         }
-    } );
-    
+    });
 }
 
+function EnviarDados() {
+    const url = 'http://10.0.3.132:1313/save-data'
 
+    var nome = document.getElementById('nome').value;
+    var telefone = document.getElementById('telefone').value;
+    var email = document.getElementById('email').value;
+    var turma = document.getElementById('turma').value;
+    var avatar = document.getElementById('avatar').value;
 
+    var meusDados = {
+        nome,
+        telefone,
+        email,
+        turma,
+        avatar,
+    }
+    fetch(url, {
+        method: 'Post',
+        body: JSON.stringify(meusDados),
+        headers: {
+            "Content-type": "application/json"
 
-
-
-
-
-<tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
+        },
+    }).then((resultado) => {
+        return resultado.json();
+    })
+}
